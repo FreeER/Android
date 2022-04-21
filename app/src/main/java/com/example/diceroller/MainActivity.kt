@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var dice1 : ImageView
     lateinit var dice2 : ImageView
     lateinit var resultText : TextView
-    val radios = mutableMapOf<Int, RadioButton>()
+    val radioSides = mutableMapOf<Int, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         for (i in 0 until diceGroup.childCount) {
             val r = diceGroup.getChildAt(i)
-            radios[r.id] = r as RadioButton
+            radioSides[r.id] = (r as RadioButton).text.toString().toInt()
         }
         rollButton.setOnClickListener { rollDice() }
     }
@@ -41,9 +41,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "You rolled the dice!", Toast.LENGTH_LONG).show()
         rollButton.isEnabled = false
 
-        val sides = try {
-            radios[diceGroup.checkedRadioButtonId]!!.text.toString().toInt()
-        } catch (e: Exception) { 6 }
+        val sides = radioSides.getOrDefault(diceGroup.checkedRadioButtonId,6)
         val vantage = checkVantage.isChecked
 
         // implement a changing dice roll that slows down over time
