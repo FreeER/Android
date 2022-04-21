@@ -2,6 +2,7 @@ package com.example.diceroller
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import java.lang.reflect.Field
@@ -31,6 +32,8 @@ class MainActivity : AppCompatActivity() {
             radioSides[r.id] = (r as RadioButton).text.toString().toInt()
         }
         rollButton.setOnClickListener { rollDice() }
+
+        (dice1.layoutParams as ViewGroup.MarginLayoutParams).rightMargin = dice1.width
     }
 
     var timerTicks = 0
@@ -52,9 +55,9 @@ class MainActivity : AppCompatActivity() {
                 timerTicks++
                 if (timerTicks >= neededTicks)
                 {
-                    neededTicks = (neededTicks * 1.4).toInt()
-                    val a = (1..sides).random().toString()
-                    val b = (1..sides).random().toString()
+                    neededTicks = (neededTicks * 1.4).toInt() // increase delay to next roll, ie. slow down
+                    val a = (1..sides).random()
+                    val b = (1..sides).random()
                     if(sides == 6)
                     {
                         // https://stackoverflow.com/questions/4427608/android-getting-resource-id-from-string
@@ -66,10 +69,10 @@ class MainActivity : AppCompatActivity() {
                             dice1.setImageResource(resIDa)
                             dice2.setImageResource(if (vantage) resIDb else R.drawable.empty_dice)
                         } catch (e: Exception) {
-                            resultText.text = if(!vantage) a else "$a    $b"
+                            resultText.text = if(!vantage) "$a" else "$a    $b"
                         }
                     } else {
-                        resultText.text = if(!vantage) a else "$a    $b"
+                        resultText.text = if(!vantage) "$a" else "$a    $b"
                         dice1.setImageResource(R.drawable.empty_dice)
                         dice2.setImageResource(R.drawable.empty_dice)
                     }
